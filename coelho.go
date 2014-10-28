@@ -28,8 +28,8 @@ func NewPaolo(quotesFile string) (*Paolo, error) {
 
 // Quote db
 type Quote struct {
-	BookTitle string `json:book_title`
-	Sentence  string `json:sentence`
+	BookTitle string `json:"book_title"`
+	Sentence  string `json:"sentence"`
 }
 
 // NewQuotes factory
