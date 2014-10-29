@@ -7,33 +7,33 @@ import (
 	"os"
 )
 
-// Paolo type, gives access to random Paolo quote
-type Paolo struct {
-	quotes []Quote
+// Quote
+type Quote struct {
+	Source   string `json:"source"`
+	Sentence string `json:"sentence"`
 }
 
-//RandomQuote is returned
-func (paolo *Paolo) RandomQuote() Quote {
-	return paolo.quotes[rand.Intn(len(paolo.quotes))]
+// Paolo type, gives access to random Paolo quote
+type Paolo struct {
+	Quotes []Quote
 }
 
 // NewPaolo is born
 func NewPaolo(quotesFile string) (*Paolo, error) {
-	newQuotes, err := NewQuotes(quotesFile)
+	newQuotes, err := newQuotes(quotesFile)
 	if err != nil {
 		return nil, err
 	}
-	return &Paolo{quotes: newQuotes}, nil
+	return &Paolo{Quotes: newQuotes}, nil
 }
 
-// Quote db
-type Quote struct {
-	BookTitle string `json:"book_title"`
-	Sentence  string `json:"sentence"`
+//RandomQuote is returned
+func (paolo *Paolo) RandomQuote() Quote {
+	return paolo.Quotes[rand.Intn(len(paolo.Quotes))]
 }
 
-// NewQuotes factory
-func NewQuotes(quotesFilePath string) ([]Quote, error) {
+// newQuotes factory
+func newQuotes(quotesFilePath string) ([]Quote, error) {
 	fileContent, err := os.Open(quotesFilePath)
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func NewQuotes(quotesFilePath string) ([]Quote, error) {
 	decoder := json.NewDecoder(fileContent)
 	var quotes []Quote
 	if err := decoder.Decode(&quotes); err != nil {
-		return nil, errors.New("Failed to decode json")
+		return nil, errors.New("Failed to decode json: " + err.Error())
 	}
 	return quotes, nil
 }

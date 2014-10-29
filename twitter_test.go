@@ -23,7 +23,7 @@ func Test_shouldGetRandomTweet(t *testing.T) {
 	randomTweet := paolo.RandomTweet()
 
 	assert.NotNil(t, randomTweet)
-	assert.Equal(t, "test tweet", randomTweet)
+	assert.Equal(t, "test tweet", randomTweet.Sentence)
 }
 
 type FakeTwitterClient struct{}

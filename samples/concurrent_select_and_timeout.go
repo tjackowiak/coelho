@@ -2,38 +2,44 @@ package main
 
 import (
 	"bitbucket.org/maneo/coelho"
-	"io"
+	"encoding/json"
 	"net/http"
-	"strconv"
 	"time"
 )
 
 func main() {
 
+	wisePaolo := coelho.NewHeartQuotes()
+	twittingPaolo := coelho.DefaultTwettingPaolo()
 	localPaolo, err := coelho.NewPaolo("quotes.json")
 	if err != nil {
-		println("Failed to load quotes")
+		println("Failed to load quotes: " + err.Error())
 		return
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		quote := make(chan string)
-		go func() { quote <- "[Local]" + localPaolo.RandomQuote().Sentence }()
-		go func() { quote <- "[Twitter]" + coelho.DefaultTwettingPaolo().RandomTweet() }()
-		go func() { q, _ := coelho.NewHeartQuotes().RandomHeartQuote(); quote <- "[HeartQuote]" + q }()
+
+		paolo := coelho.Paolo{}
+		quote := make(chan coelho.Quote)
+		go func() { quote <- localPaolo.RandomQuote() }()
+		go func() { quote <- twittingPaolo.RandomTweet() }()
+		go func() { quote <- wisePaolo.RandomHeartQuote() }()
 
 		timeout := time.After(500 * time.Millisecond)
+	Quotes:
 		for i := 0; i < 3; i++ {
 			select {
-			case tweet := <-quote:
-				io.WriteString(w, "#"+strconv.Itoa(i+1)+" tweet\n")
-				io.WriteString(w, tweet+"\n")
+			case q := <-quote:
+				paolo.Quotes = append(paolo.Quotes, q)
 			case <-timeout:
-				io.WriteString(w, "\nWhy so slow?")
-				return
+				q := coelho.Quote{Source: "timeout", Sentence: "why so slow?"}
+				paolo.Quotes = append(paolo.Quotes, q)
+				break Quotes
 			}
 		}
 
+		quotes, _ := json.Marshal(paolo.Quotes)
+		w.Write(quotes)
 	})
 
 	http.ListenAndServe(":8080", nil)

@@ -24,10 +24,14 @@ func NewTweetingPaolo(twitter TwitterClient) *TweetingPaolo {
 }
 
 //RandomTweet is returned
-func (paolo *TweetingPaolo) RandomTweet() string {
+func (paolo *TweetingPaolo) RandomTweet() Quote {
+	quote := Quote{Source: "twitter"}
 	listOfTweets, err := paolo.api.Tweets(paoloScreenName)
 	if err != nil {
-		return "darkness"
+		quote.Sentence = "darkness"
+		return quote
 	}
-	return listOfTweets[rand.Intn(len(listOfTweets))]
+
+	quote.Sentence = listOfTweets[rand.Intn(len(listOfTweets))]
+	return quote
 }
