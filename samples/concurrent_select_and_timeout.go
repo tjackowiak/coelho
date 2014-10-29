@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bitbucket.org/maneo/coelho"
 	"encoding/json"
+	"github.com/tjackowiak/coelho"
 	"net/http"
 	"time"
 )
