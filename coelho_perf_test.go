@@ -17,7 +17,7 @@ func prepareBenchmarkFile() string {
 	f, _ := ioutil.TempFile("", "tmpquotes")
 	defer f.Close()
 	w := bufio.NewWriter(f)
-	w.WriteString(`[{"book_title":"book", "sentence":"nothing better than you"}]`)
+	w.WriteString(`[{"source":"book", "sentence":"nothing better than you"}]`)
 	w.Flush()
 	return f.Name()
 }

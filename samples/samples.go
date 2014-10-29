@@ -58,7 +58,7 @@ package main
 // 	upTweets := 0
 
 // 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-// 		io.WriteString(w, paolo.RandomTweet())
+// 		io.WriteString(w, paolo.RandomTweet().Sentence)
 // 		upTweets++
 // 	})
 // 	http.HandleFunc("/status", func(w http.ResponseWriter, r *http.Request) {
@@ -82,8 +82,8 @@ package main
 // 	upQuotes := 0
 
 // 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-// 		quote, _ := coelho.NewHeartQuotes().RandomHeartQuote()
-// 		io.WriteString(w, quote)
+// 		quote := coelho.NewHeartQuotes().RandomHeartQuote()
+// 		io.WriteString(w, quote.Sentence)
 // 		upQuotes++
 // 	})
 // 	http.HandleFunc("/status", func(w http.ResponseWriter, r *http.Request) {
@@ -103,6 +103,8 @@ import (
 
 func main() {
 
+	wisePaolo := coelho.NewHeartQuotes()
+	twittingPaolo := coelho.DefaultTwettingPaolo()
 	localPaolo, err := coelho.NewPaolo("quotes.json")
 	if err != nil {
 		println("Failed to load quotes")
@@ -114,16 +116,17 @@ func main() {
 	})
 
 	http.HandleFunc("/heart", func(w http.ResponseWriter, r *http.Request) {
-		quote, _ := coelho.NewHeartQuotes().RandomHeartQuote()
-		io.WriteString(w, quote)
+		io.WriteString(w, wisePaolo.RandomHeartQuote().Sentence)
 	})
+
 	http.HandleFunc("/twitter", func(w http.ResponseWriter, r *http.Request) {
-		io.WriteString(w, coelho.DefaultTwettingPaolo().RandomTweet())
+		io.WriteString(w, twittingPaolo.RandomTweet().Sentence)
 	})
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		localQuote := localPaolo.RandomQuote().Sentence
-		twitterQuote := coelho.DefaultTwettingPaolo().RandomTweet()
-		heartQuote, _ := coelho.NewHeartQuotes().RandomHeartQuote()
+		twitterQuote := twittingPaolo.RandomTweet().Sentence
+		heartQuote := wisePaolo.RandomHeartQuote().Sentence
 		io.WriteString(w, "First tweet\n")
 		io.WriteString(w, localQuote)
 		io.WriteString(w, "\nSecond tweet\n")

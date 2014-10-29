@@ -37,9 +37,16 @@ func NewHeartQuotes() *HeartQuotes {
 }
 
 //RandomHeartQuote returns random quote
-func (hq *HeartQuotes) RandomHeartQuote() (string, error) {
+func (hq *HeartQuotes) RandomHeartQuote() Quote {
+	quote := Quote{Source: "Heart Quotes"}
 	resp, err := hq.QuoteFetcher()
-	return hq.cleanQuote(resp), err
+	if err != nil {
+		quote.Sentence = "darkness"
+		return quote
+	}
+
+	quote.Sentence = hq.cleanQuote(resp)
+	return quote
 }
 
 func (hq *HeartQuotes) cleanQuote(quote string) string {

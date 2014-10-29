@@ -6,7 +6,7 @@ import (
 )
 
 func Test_retrieval(t *testing.T) {
-	result, _ := NewHeartQuotes().RandomHeartQuote()
+	result := NewHeartQuotes().RandomHeartQuote()
 	assert.NotNil(t, result)
 }
 
@@ -17,8 +17,8 @@ func Test_quoteCleaning(t *testing.T) {
 
 	quotes := &HeartQuotes{QuoteFetcher: fakeFetcher}
 
-	result, _ := quotes.RandomHeartQuote()
-	assert.Equal(t, "example \"content\"", result)
+	result := quotes.RandomHeartQuote()
+	assert.Equal(t, "example \"content\"", result.Sentence)
 }
 
 func Test_shouldRemoveNewLine(t *testing.T) {
@@ -28,7 +28,7 @@ func Test_shouldRemoveNewLine(t *testing.T) {
 
 	quotes := &HeartQuotes{QuoteFetcher: fakeFetcher}
 
-	result, _ := quotes.RandomHeartQuote()
-	assert.Equal(t, "example with new line", result)
+	result := quotes.RandomHeartQuote()
+	assert.Equal(t, "example with new line", result.Sentence)
 
 }

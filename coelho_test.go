@@ -26,21 +26,21 @@ func Test_shouldReturnRandomQuote(t *testing.T) {
 }
 
 func Test_shouldReturnNewInstance(t *testing.T) {
-	quotes, err := NewQuotes(prepareTestFile(t))
+	quotes, err := newQuotes(prepareTestFile(t))
 
 	assert.Nil(t, err)
 	assert.NotNil(t, quotes)
 }
 
 func Test_shouldReturnQuote(t *testing.T) {
-	quote, err := NewQuotes(prepareTestFile(t))
+	quote, err := newQuotes(prepareTestFile(t))
 
 	assert.Nil(t, err)
 	assert.NotNil(t, quote[0])
 }
 
 func Test_shouldReturnRightQuote(t *testing.T) {
-	quote, _ := NewQuotes(prepareTestFile(t))
+	quote, _ := newQuotes(prepareTestFile(t))
 	assert.Equal(t, "nothing better than you", quote[0].Sentence)
 }
 
@@ -51,7 +51,7 @@ func prepareTestFile(t *testing.T) string {
 	}
 	defer f.Close()
 	w := bufio.NewWriter(f)
-	w.WriteString(`[{"book_title":"book", "sentence":"nothing better than you"}]`)
+	w.WriteString(`[{"source":"book", "sentence":"nothing better than you"}]`)
 	w.Flush()
 	return f.Name()
 }
