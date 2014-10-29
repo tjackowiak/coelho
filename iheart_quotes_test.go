@@ -3,6 +3,7 @@ package coelho
 import (
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"errors"
 )
 
 func Test_retrieval(t *testing.T) {
@@ -30,5 +31,17 @@ func Test_shouldRemoveNewLine(t *testing.T) {
 
 	result := quotes.RandomHeartQuote()
 	assert.Equal(t, "example with new line", result.Sentence)
+
+}
+
+func Test_shouldBringDarknessOnError(t *testing.T) {
+	fakeFetcher := func() (string, error) {
+		return "", errors.New("No Quote For You")
+	}
+
+	quotes := &HeartQuotes{QuoteFetcher: fakeFetcher}
+
+	result := quotes.RandomHeartQuote()
+	assert.Equal(t, "darkness", result.Sentence)
 
 }
