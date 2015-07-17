@@ -6,5 +6,9 @@
   { 
   	"source":"book2", 
   	"sentence":"there is always time to code"
+  },
+  { 
+  	"source":"book3", 
+  	"sentence":"Człowiek jest jak stolarz. Stolarz rodzi się i umiera, człowiek także."
   }
 ]
